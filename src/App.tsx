@@ -34,12 +34,14 @@ export default function App() {
   }, []);
 
   return (
-    <div>
+    <div className="flex h-screen flex-col bg-gradient-to-tl from-blue-500 to-blue-300">
       <ScoreBoard {...scores} />
       {cards ? (
         <CardList initialCards={cards} setScores={setScores} />
       ) : (
-        <h1>Loading...</h1>
+        <h1 className="mb-auto mt-auto flex justify-center text-6xl">
+          Loading...
+        </h1>
       )}
     </div>
   );
