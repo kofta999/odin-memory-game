@@ -1,35 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from "react";
+import { fetchChars } from "./util";
+import CardList from "./components/CardList";
+import ScoreBoard from "./components/ScoreBoard";
 
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+export interface ICard {
+  _id: string;
+  photoUrl: string;
+  name: string;
+  [key: string]: string;
 }
 
-export default App
+export interface IScoreBoard {
+  score: number;
+  bestScore: number;
+}
+
+export default function App() {
+  const [cards, setCards] = useState<ICard[] | null>(null);
+  const [scores, setScores] = useState({ score: 0, bestScore: 0 });
+
+  useEffect(() => {
+    let ignore = false;
+    setCards(null);
+    fetchChars().then((cards) => {
+      if (!ignore && cards) {
+        setCards(cards);
+      }
+    });
+
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  return (
+    <div>
+      <ScoreBoard {...scores} />
+      {cards ? (
+        <CardList initialCards={cards} setScores={setScores} />
+      ) : (
+        <h1>Loading...</h1>
+      )}
+    </div>
+  );
+}
