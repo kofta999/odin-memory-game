@@ -49,7 +49,7 @@ export default function CardList({ initialCards, setScores }: CardListProps) {
   };
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,16rem)] gap-16 p-10">
+    <div className="grid grid-cols-[repeat(auto-fit,16rem)] gap-16 p-10 justify-center items-center">
       {cards.map((card) => (
         <Card
           key={card._id}
