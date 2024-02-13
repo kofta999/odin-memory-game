@@ -1,6 +1,7 @@
 import React, { SetStateAction, useState } from "react";
 import type { ICard, IScoreBoard } from "../App";
 import Card from "./Card";
+import { randomizeCards } from "../util";
 
 interface CardListProps {
   initialCards: ICard[];
@@ -24,21 +25,8 @@ export default function CardList({ initialCards, setScores }: CardListProps) {
     }));
   };
 
-  const randomizeCards = () => {
-    const shuffledCards = [...cards];
-    for (let i = shuffledCards.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [shuffledCards[i], shuffledCards[j]] = [
-        shuffledCards[j],
-        shuffledCards[i],
-      ];
-    }
-
-    return shuffledCards;
-  };
-
   const handleCardClick = (id: string) => () => {
-    setCards(randomizeCards());
+    setCards(randomizeCards(cards));
     if (clicked[id] === true) {
       resetGame();
       return;
@@ -49,7 +37,7 @@ export default function CardList({ initialCards, setScores }: CardListProps) {
   };
 
   return (
-    <div className="grid grid-cols-[repeat(auto-fit,16rem)] gap-16 p-10 justify-center items-center">
+    <div className="grid grid-cols-[repeat(auto-fit,16rem)] items-center justify-center gap-16 p-10">
       {cards.map((card) => (
         <Card
           key={card._id}
